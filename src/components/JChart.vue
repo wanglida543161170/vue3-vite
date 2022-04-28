@@ -4,10 +4,31 @@
     :class="{ customClass: customClass }"
     class="w-full h-full"
   ></div>
+  <object
+    ref="domRef"
+    tabindex="-1"
+    type="text/html"
+    aria-hidden="true"
+    data="about:blank"
+    style="
+      display: block;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      border: none;
+      padding: 0px;
+      margin: 0px;
+      opacity: 0;
+      z-index: -1000;
+      pointer-events: none;
+    "
+  ></object>
 </template>
 
 <script>
-import { computed, defineComponent, onBeforeMount, onMounted, ref, onUpdated } from "vue";
+import { computed, defineComponent, onBeforeMount, onMounted, ref } from "vue";
 import * as echarts from "echarts";
 
 export default defineComponent({
@@ -39,21 +60,18 @@ export default defineComponent({
         initResizeEvent();
       }
     };
-    // 自适应
-    const initResizeEvent = () => {
-      document.getElementById(chartId).addEventListener("onresize", resize);
-    };
-
     const resize = () => {
-      console.log(123);
       if (chart) {
         chart.resize();
       }
     };
-
-    onUpdated(() => {
-      console.log(321)
-    })
+    // 自适应
+    const initResizeEvent = () => {
+      domRef.value.contentDocument.defaultView.addEventListener(
+        "resize",
+        resize
+      );
+    };
 
     onBeforeMount(() => {
       if (!chart) {
