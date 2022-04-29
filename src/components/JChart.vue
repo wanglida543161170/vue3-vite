@@ -48,7 +48,7 @@ export default defineComponent({
   setup(props) {
     let chart;
     const domRef = ref();
-    const chartId = "echart-" + new Date().getTime();
+    const chartId = "echart-" + new Date().getTime() + Math.random();
     const options = computed(() => props.chartOptions);
     const customClass = computed(() => props.className);
 
